@@ -31,15 +31,16 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/pricing" element={<PricingPage />} />
 
-      {/* Protected routes */}
+      {/* Protected dashboard routes */}
       <Route
-        path="/"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         }
       >
+        <Route index element={<Navigate to="pipeline" replace />} />
         <Route path="pipeline" element={<Pipeline />} />
         <Route path="contacts" element={<div>Contacts (Coming Soon)</div>} />
         <Route path="companies" element={<div>Companies (Coming Soon)</div>} />

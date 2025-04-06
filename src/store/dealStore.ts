@@ -15,6 +15,8 @@ export const useDealStore = create<DealStore>((set) => ({
   stages: initialStages,
   
   addDeal: (dealData) => set((state) => {
+    if (!dealData) return state
+    
     const newDeal: Deal = {
       ...dealData,
       id: generateId(),
@@ -32,10 +34,12 @@ export const useDealStore = create<DealStore>((set) => ({
   }),
 
   moveDeal: (dealId, fromStage, toStage) => set((state) => {
-    const deal = state.stages
-      .find(s => s.id === fromStage)
-      ?.deals.find(d => d.id === dealId)
+    if (!dealId || !fromStage || !toStage) return state
 
+    const sourceStage = state.stages.find(s => s.id === fromStage)
+    if (!sourceStage) return state
+
+    const deal = sourceStage.deals.find(d => d.id === dealId)
     if (!deal) return state
 
     const updatedDeal = { ...deal, stage: toStage, updatedAt: new Date() }
@@ -53,21 +57,29 @@ export const useDealStore = create<DealStore>((set) => ({
     }
   }),
 
-  updateDeal: (dealId, updates) => set((state) => ({
-    stages: state.stages.map(stage => ({
-      ...stage,
-      deals: stage.deals.map(deal => 
-        deal.id === dealId
-          ? { ...deal, ...updates, updatedAt: new Date() }
-          : deal
-      )
-    }))
-  })),
+  updateDeal: (dealId, updates) => set((state) => {
+    if (!dealId || !updates) return state
 
-  deleteDeal: (dealId) => set((state) => ({
-    stages: state.stages.map(stage => ({
-      ...stage,
-      deals: stage.deals.filter(deal => deal.id !== dealId)
-    }))
-  })),
+    return {
+      stages: state.stages.map(stage => ({
+        ...stage,
+        deals: stage.deals.map(deal => 
+          deal.id === dealId
+            ? { ...deal, ...updates, updatedAt: new Date() }
+            : deal
+        )
+      }))
+    }
+  }),
+
+  deleteDeal: (dealId) => set((state) => {
+    if (!dealId) return state
+
+    return {
+      stages: state.stages.map(stage => ({
+        ...stage,
+        deals: stage.deals.filter(deal => deal.id !== dealId)
+      }))
+    }
+  }),
 }))

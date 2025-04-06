@@ -10,11 +10,11 @@ import {
 } from 'lucide-react'
 
 const navigation = [
-  { name: 'Pipeline', href: '/dashboard/pipeline', icon: LayoutGrid },
-  { name: 'Contacts', href: '/dashboard/contacts', icon: Users },
-  { name: 'Companies', href: '/dashboard/companies', icon: Building2 },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-  { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+  { name: 'Pipeline', href: '/pipeline', icon: LayoutGrid },
+  { name: 'Contacts', href: '/contacts', icon: Users },
+  { name: 'Companies', href: '/companies', icon: Building2 },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export function DashboardLayout() {
@@ -44,7 +44,7 @@ export function DashboardLayout() {
                         to={item.href}
                         className={`
                           group flex items-center px-2 py-2 text-sm font-medium rounded-md
-                          ${location.pathname === item.href
+                          ${location.pathname.startsWith(item.href)
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
                         `}
@@ -52,7 +52,7 @@ export function DashboardLayout() {
                         <Icon
                           className={`
                             mr-3 flex-shrink-0 h-6 w-6
-                            ${location.pathname === item.href
+                            ${location.pathname.startsWith(item.href)
                               ? 'text-gray-500'
                               : 'text-gray-400 group-hover:text-gray-500'}
                           `}

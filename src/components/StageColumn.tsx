@@ -28,19 +28,21 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
         </div>
       </div>
 
-      <Droppable droppableId={stage.id}>
+      <Droppable droppableId={stage.id} type="DEAL">
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
             className={`
-              flex-1 transition-colors duration-200 rounded-md
-              ${snapshot.isDraggingOver ? 'bg-blue-50' : ''}
+              flex-1 min-h-[200px] transition-colors duration-200 rounded-md p-2
+              ${snapshot.isDraggingOver ? 'bg-blue-50/50' : 'bg-transparent'}
             `}
           >
-            {stage.deals.map((deal, index) => (
-              <DealCard key={deal.id} deal={deal} index={index} />
-            ))}
+            <div className="space-y-2">
+              {stage.deals.map((deal, index) => (
+                <DealCard key={deal.id} deal={deal} index={index} />
+              ))}
+            </div>
             {provided.placeholder}
           </div>
         )}

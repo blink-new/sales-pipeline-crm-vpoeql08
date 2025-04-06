@@ -10,13 +10,17 @@ export function Pipeline() {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = useCallback((initial: DragStart) => {
+    if (!initial.source) return
     setIsDragging(true)
   }, [])
 
   const handleDragEnd = useCallback((result: DropResult) => {
     setIsDragging(false)
     
-    if (!result.destination) return
+    // Ensure we have valid source and destination
+    if (!result.destination || !result.source || !result.draggableId) {
+      return
+    }
 
     const { destination, source, draggableId } = result
 
@@ -28,8 +32,17 @@ export function Pipeline() {
       return
     }
 
+    // Ensure the stages exist
+    const sourceStage = stages.find(s => s.id === source.droppableId)
+    const destStage = stages.find(s => s.id === destination.droppableId)
+
+    if (!sourceStage || !destStage) {
+      console.error('Invalid stage in drag operation')
+      return
+    }
+
     moveDeal(draggableId, source.droppableId, destination.droppableId)
-  }, [moveDeal])
+  }, [moveDeal, stages])
 
   // If stages are not loaded yet, show loading state
   if (!stages || stages.length === 0) {

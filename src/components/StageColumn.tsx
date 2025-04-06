@@ -28,7 +28,7 @@ export const StageColumn: React.FC<StageColumnProps> = memo(({ stage }) => {
         </div>
       </div>
 
-      <Droppable droppableId={stage.id}>
+      <Droppable droppableId={stage.id} type="DEAL">
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}

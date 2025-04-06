@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -32,8 +33,10 @@ export default defineConfig({
       usePolling: true,
     },
     hmr: {
-      protocol: 'wss',
-      clientPort: 443,
+      protocol: 'ws',
+      host: 'localhost',
+      port: 3000,
+      clientPort: 3000,
       timeout: 120000
     },
     allowedHosts: ['.blink.new']

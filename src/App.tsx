@@ -1,61 +1,32 @@
 
-import { useAuth, RedirectToSignIn } from '@clerk/clerk-react'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { DashboardLayout } from './layouts/DashboardLayout'
+import { ClerkProvider } from '@clerk/clerk-react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { LandingPage } from './pages/LandingPage'
 import { PricingPage } from './pages/PricingPage'
-import { Pipeline } from './components/Pipeline'
-import { ErrorBoundary } from './components/ErrorBoundary'
+import { Pipeline } from './pages/Pipeline'
+import { Toaster } from './components/ui/toaster'
+import { useState } from 'react'
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isSignedIn, isLoaded } = useAuth()
+// Get the Clerk publishable key from environment variable
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
-    )
-  }
-
-  if (!isSignedIn) {
-    return <RedirectToSignIn />
-  }
-
-  return <>{children}</>
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key')
 }
 
-function App() {
+export function App() {
   return (
-    <ErrorBoundary>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-
-        {/* Protected routes */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <ErrorBoundary>
-                <DashboardLayout />
-              </ErrorBoundary>
-            </ProtectedRoute>
-          }
-        >
-          <Route path="pipeline" element={<Pipeline />} />
-          <Route path="contacts" element={<div>Contacts (Coming Soon)</div>} />
-          <Route path="companies" element={<div>Companies (Coming Soon)</div>} />
-          <Route path="analytics" element={<div>Analytics (Coming Soon)</div>} />
-          <Route path="settings" element={<div>Settings (Coming Soon)</div>} />
-        </Route>
-
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </ErrorBoundary>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <Router>
+        <div className="min-h-screen bg-white">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/pipeline" element={<Pipeline />} />
+          </Routes>
+        </div>
+        <Toaster />
+      </Router>
+    </ClerkProvider>
   )
 }
-
-export default App

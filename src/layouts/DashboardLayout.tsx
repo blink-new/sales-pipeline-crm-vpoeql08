@@ -19,12 +19,6 @@ const navigation = [
 
 export function DashboardLayout() {
   const location = useLocation()
-  const currentPath = location?.pathname || '/'
-
-  const isActiveRoute = (href: string): boolean => {
-    if (!href || !currentPath) return false
-    return currentPath.startsWith(href)
-  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -44,15 +38,13 @@ export function DashboardLayout() {
                 <nav className="flex-1 px-2 space-y-1">
                   {navigation.map((item) => {
                     const Icon = item.icon
-                    const isActive = isActiveRoute(item.href)
-                    
                     return (
                       <Link
                         key={item.name}
                         to={item.href}
                         className={`
                           group flex items-center px-2 py-2 text-sm font-medium rounded-md
-                          ${isActive
+                          ${location.pathname.startsWith(item.href)
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
                         `}
@@ -60,11 +52,10 @@ export function DashboardLayout() {
                         <Icon
                           className={`
                             mr-3 flex-shrink-0 h-6 w-6
-                            ${isActive
+                            ${location.pathname.startsWith(item.href)
                               ? 'text-gray-500'
                               : 'text-gray-400 group-hover:text-gray-500'}
                           `}
-                          aria-hidden="true"
                         />
                         {item.name}
                       </Link>

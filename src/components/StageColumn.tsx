@@ -10,11 +10,7 @@ interface StageColumnProps {
 }
 
 export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
-  if (!stage) {
-    return null
-  }
-
-  const totalValue = stage.deals?.reduce((sum, deal) => sum + (deal?.value || 0), 0) || 0
+  const totalValue = stage.deals.reduce((sum, deal) => sum + deal.value, 0)
   
   return (
     <div className="flex flex-col h-full w-80 bg-gray-50 rounded-lg p-4">
@@ -23,7 +19,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
           <h3 className="font-medium text-gray-900">
             {stage.title}
             <span className="ml-2 text-sm text-gray-500">
-              ({stage.deals?.length || 0})
+              ({stage.deals.length})
             </span>
           </h3>
         </div>
@@ -42,8 +38,8 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
               ${snapshot.isDraggingOver ? 'bg-blue-50' : ''}
             `}
           >
-            {stage.deals?.map((deal, index) => (
-              deal && <DealCard key={deal.id} deal={deal} index={index} />
+            {stage.deals.map((deal, index) => (
+              <DealCard key={deal.id} deal={deal} index={index} />
             ))}
             {provided.placeholder}
           </div>

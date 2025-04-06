@@ -8,11 +8,9 @@ export function Pipeline() {
   const { stages, moveDeal } = useDealStore()
 
   const handleDragEnd = (result: DropResult) => {
-    if (!result) return
-
     const { destination, source, draggableId } = result
 
-    if (!destination || !source || !draggableId) return
+    if (!destination) return
 
     if (
       destination.droppableId === source.droppableId &&
@@ -22,14 +20,6 @@ export function Pipeline() {
     }
 
     moveDeal(draggableId, source.droppableId, destination.droppableId)
-  }
-
-  if (!stages || stages.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">No stages available</p>
-      </div>
-    )
   }
 
   return (

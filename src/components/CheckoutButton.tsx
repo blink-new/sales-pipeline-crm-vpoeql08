@@ -23,6 +23,8 @@ export function CheckoutButton({ priceId, children, className }: CheckoutButtonP
         throw new Error('Failed to initialize Stripe')
       }
 
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
+
       // Redirect to Checkout
       const { error } = await stripe.redirectToCheckout({
         lineItems: [
@@ -31,9 +33,9 @@ export function CheckoutButton({ priceId, children, className }: CheckoutButtonP
             quantity: 1,
           },
         ],
-        mode: 'subscription', // Changed to subscription mode
-        successUrl: `${window.location.origin}/success`,
-        cancelUrl: `${window.location.origin}/pricing`,
+        mode: 'subscription',
+        successUrl: `${baseUrl}/success`,
+        cancelUrl: `${baseUrl}/pricing`,
       })
 
       if (error) {
@@ -55,7 +57,7 @@ export function CheckoutButton({ priceId, children, className }: CheckoutButtonP
     <Button 
       onClick={handleCheckout}
       disabled={loading}
-      className={`mt-8 w-full ${className}`}
+      className={className}
       variant={loading ? 'outline' : 'default'}
     >
       {loading ? 'Loading...' : children}

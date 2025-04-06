@@ -3,6 +3,8 @@ import { SignUpButton, useAuth } from '@clerk/clerk-react'
 import { Check, Zap } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { LandingLayout } from '../layouts/LandingLayout'
 
 const tiers = [
   {
@@ -56,7 +58,7 @@ const tiers = [
   },
 ]
 
-export function PricingPage() {
+export function PricingContent() {
   const { isSignedIn } = useAuth()
   const [annual, setAnnual] = useState(true)
 
@@ -227,6 +229,14 @@ export function PricingPage() {
         </motion.div>
       </div>
     </div>
+  )
+}
+
+export function PricingPage() {
+  return (
+    <LandingLayout>
+      <PricingContent />
+    </LandingLayout>
   )
 }
 

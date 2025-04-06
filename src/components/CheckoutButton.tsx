@@ -2,14 +2,17 @@
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { getStripe } from '../lib/stripe'
+import { useToast } from '../hooks/use-toast'
 
 interface CheckoutButtonProps {
   priceId: string
   children: React.ReactNode
+  className?: string
 }
 
-export function CheckoutButton({ priceId, children }: CheckoutButtonProps) {
+export function CheckoutButton({ priceId, children, className }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
 
   const handleCheckout = async () => {
     try {
@@ -17,7 +20,7 @@ export function CheckoutButton({ priceId, children }: CheckoutButtonProps) {
       const stripe = await getStripe()
       
       if (!stripe) {
-        throw new Error('Stripe failed to initialize')
+        throw new Error('Failed to initialize Stripe')
       }
 
       // Redirect to Checkout
@@ -28,16 +31,21 @@ export function CheckoutButton({ priceId, children }: CheckoutButtonProps) {
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'subscription', // Changed to subscription mode
         successUrl: `${window.location.origin}/success`,
-        cancelUrl: `${window.location.origin}/canceled`,
+        cancelUrl: `${window.location.origin}/pricing`,
       })
 
       if (error) {
-        console.error('Error:', error)
+        throw error
       }
     } catch (error) {
       console.error('Error:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to start checkout process. Please try again.',
+        variant: 'destructive',
+      })
     } finally {
       setLoading(false)
     }
@@ -47,6 +55,8 @@ export function CheckoutButton({ priceId, children }: CheckoutButtonProps) {
     <Button 
       onClick={handleCheckout}
       disabled={loading}
+      className={`mt-8 w-full ${className}`}
+      variant={loading ? 'outline' : 'default'}
     >
       {loading ? 'Loading...' : children}
     </Button>

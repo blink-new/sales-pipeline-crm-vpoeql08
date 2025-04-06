@@ -2,12 +2,13 @@
 import { useState } from 'react'
 import { SignInButton, useAuth } from '@clerk/clerk-react'
 import { Check } from 'lucide-react'
+import { CheckoutButton } from '../components/CheckoutButton'
 
 const tiers = [
   {
     name: 'Starter',
     id: 'tier-starter',
-    href: '#',
+    priceId: 'price_starter', // Replace with your actual Stripe price ID
     priceMonthly: '$29',
     description: 'Perfect for small teams getting started.',
     features: [
@@ -22,7 +23,7 @@ const tiers = [
   {
     name: 'Professional',
     id: 'tier-professional',
-    href: '#',
+    priceId: 'price_professional', // Replace with your actual Stripe price ID
     priceMonthly: '$99',
     description: 'For growing teams that need more.',
     features: [
@@ -39,7 +40,7 @@ const tiers = [
   {
     name: 'Enterprise',
     id: 'tier-enterprise',
-    href: '#',
+    priceId: null, // Enterprise is contact sales
     priceMonthly: 'Custom',
     description: 'Dedicated support and infrastructure.',
     features: [
@@ -115,21 +116,23 @@ export function PricingPage() {
                 </ul>
               </div>
               {isSignedIn ? (
-                <a
-                  href={tier.href}
-                  aria-describedby={tier.id}
-                  className={`
-                    mt-8 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6
-                    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                    ${
-                      tier.featured
-                        ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-500 focus-visible:outline-blue-600'
-                        : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-                    }
-                  `}
-                >
-                  {tier.name === 'Enterprise' ? 'Contact sales' : 'Subscribe'}
-                </a>
+                tier.priceId ? (
+                  <CheckoutButton priceId={tier.priceId}>
+                    <span className={`
+                      w-full text-center
+                      ${tier.featured ? 'text-white' : 'text-blue-600'}
+                    `}>
+                      Subscribe Now
+                    </span>
+                  </CheckoutButton>
+                ) : (
+                  <a
+                    href="mailto:sales@company.com"
+                    className="mt-8 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 bg-blue-50 text-blue-600 hover:bg-blue-100"
+                  >
+                    Contact Sales
+                  </a>
+                )
               ) : (
                 <SignInButton mode="modal">
                   <button
@@ -143,7 +146,7 @@ export function PricingPage() {
                       }
                     `}
                   >
-                    Get started
+                    Get Started
                   </button>
                 </SignInButton>
               )}

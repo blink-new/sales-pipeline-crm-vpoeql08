@@ -9,6 +9,10 @@ const queryClient = new QueryClient()
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
+    throw new Error('Missing Clerk Publishable Key')
+  }
+
   return (
     <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
       <QueryClientProvider client={queryClient}>

@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom'
-import { SignInButton, useAuth } from '@clerk/clerk-react'
+import { useAuth } from '@clerk/clerk-react'
+import { SignInNewWindow } from '../components/SignInNewWindow'
 
 export function LandingPage() {
   const { isSignedIn } = useAuth()
@@ -30,13 +31,12 @@ export function LandingPage() {
                 Dashboard <span aria-hidden="true">→</span>
               </Link>
             ) : (
-              <SignInButton mode="popup">
-                <button
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
-                  Log in <span aria-hidden="true">→</span>
-                </button>
-              </SignInButton>
+              <SignInNewWindow
+                variant="ghost"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in <span aria-hidden="true">→</span>
+              </SignInNewWindow>
             )}
           </div>
         </nav>
@@ -60,13 +60,9 @@ export function LandingPage() {
                   Go to Dashboard
                 </Link>
               ) : (
-                <SignInButton mode="popup">
-                  <button
-                    className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    Get started
-                  </button>
-                </SignInButton>
+                <SignInNewWindow className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Get started
+                </SignInNewWindow>
               )}
               <Link to="/pricing" className="text-sm font-semibold leading-6 text-gray-900">
                 View pricing <span aria-hidden="true">→</span>

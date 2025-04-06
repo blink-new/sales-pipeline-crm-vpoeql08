@@ -1,11 +1,12 @@
 
 import { useState } from 'react'
-import { SignInButton, useAuth } from '@clerk/clerk-react'
+import { useAuth } from '@clerk/clerk-react'
 import { Check } from 'lucide-react'
 import { CheckoutButton } from '../components/CheckoutButton'
 import { Button } from '../components/ui/button'
 import { cn } from '../lib/utils'
 import { Link } from 'react-router-dom'
+import { SignInNewWindow } from '../components/SignInNewWindow'
 
 const tiers = [
   {
@@ -81,13 +82,12 @@ export function PricingPage() {
                 Dashboard <span aria-hidden="true">→</span>
               </Link>
             ) : (
-              <SignInButton mode="popup">
-                <button
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
-                  Log in <span aria-hidden="true">→</span>
-                </button>
-              </SignInButton>
+              <SignInNewWindow
+                variant="ghost"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in <span aria-hidden="true">→</span>
+              </SignInNewWindow>
             )}
           </div>
         </nav>
@@ -165,11 +165,9 @@ export function PricingPage() {
                     </Button>
                   )
                 ) : (
-                  <SignInButton mode="popup">
-                    <Button className="mt-8 w-full">
-                      Sign in to subscribe
-                    </Button>
-                  </SignInButton>
+                  <SignInNewWindow className="mt-8 w-full">
+                    Sign in to subscribe
+                  </SignInNewWindow>
                 )}
               </div>
             ))}

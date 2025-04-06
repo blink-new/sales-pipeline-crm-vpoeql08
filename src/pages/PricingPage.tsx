@@ -81,7 +81,7 @@ export function PricingPage() {
                 Dashboard <span aria-hidden="true">→</span>
               </Link>
             ) : (
-              <SignInButton mode="modal">
+              <SignInButton mode="popup">
                 <button
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
@@ -165,7 +165,7 @@ export function PricingPage() {
                     </Button>
                   )
                 ) : (
-                  <SignInButton mode="modal">
+                  <SignInButton mode="popup">
                     <Button className="mt-8 w-full">
                       Sign in to subscribe
                     </Button>

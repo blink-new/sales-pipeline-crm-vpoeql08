@@ -3,40 +3,41 @@ import { DragDropContext, DropResult, DragStart } from '@hello-pangea/dnd'
 import { StageColumn } from './StageColumn'
 import { AddDealDialog } from './AddDealDialog'
 import { useDealStore } from '../store/dealStore'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 export function Pipeline() {
   const { stages, moveDeal } = useDealStore()
   const [isDragging, setIsDragging] = useState(false)
 
-  const handleDragStart = (initial: DragStart) => {
+  const handleDragStart = useCallback((initial: DragStart) => {
     setIsDragging(true)
-  }
+  }, [])
 
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = useCallback((result: DropResult) => {
     setIsDragging(false)
     
+    if (!result.destination) return
+
     const { destination, source, draggableId } = result
 
-    // If there's no destination, or the item was dropped in the same spot
-    if (!destination || (
+    // If dropped in the same spot
+    if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    )) {
+    ) {
       return
     }
 
-    // Ensure both source and destination stages exist
-    const sourceStage = stages.find(s => s.id === source.droppableId)
-    const destStage = stages.find(s => s.id === destination.droppableId)
-    
-    if (!sourceStage || !destStage) {
-      console.error('Invalid stage in drag operation')
-      return
-    }
-
-    // Move the deal
     moveDeal(draggableId, source.droppableId, destination.droppableId)
+  }, [moveDeal])
+
+  // If stages are not loaded yet, show loading state
+  if (!stages || stages.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
   }
 
   return (

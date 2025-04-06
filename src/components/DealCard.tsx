@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { memo } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 import { Deal } from '../types'
 import { formatCurrency } from '../lib/utils'
@@ -9,7 +9,7 @@ interface DealCardProps {
   index: number
 }
 
-export const DealCard: React.FC<DealCardProps> = ({ deal, index }) => {
+export const DealCard: React.FC<DealCardProps> = memo(({ deal, index }) => {
   return (
     <Draggable draggableId={deal.id} index={index}>
       {(provided, snapshot) => (
@@ -17,6 +17,9 @@ export const DealCard: React.FC<DealCardProps> = ({ deal, index }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          style={{
+            ...provided.draggableProps.style,
+          }}
           className={`
             bg-white p-4 rounded-lg shadow-sm border border-gray-200
             ${snapshot.isDragging ? 'shadow-lg ring-2 ring-blue-500/50' : ''}
@@ -39,4 +42,6 @@ export const DealCard: React.FC<DealCardProps> = ({ deal, index }) => {
       )}
     </Draggable>
   )
-}
+})
+
+DealCard.displayName = 'DealCard'

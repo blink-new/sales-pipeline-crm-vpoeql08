@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { memo } from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import { Stage } from '../types'
 import { DealCard } from './DealCard'
@@ -9,7 +9,7 @@ interface StageColumnProps {
   stage: Stage
 }
 
-export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
+export const StageColumn: React.FC<StageColumnProps> = memo(({ stage }) => {
   const totalValue = stage.deals.reduce((sum, deal) => sum + deal.value, 0)
   
   return (
@@ -28,7 +28,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
         </div>
       </div>
 
-      <Droppable droppableId={stage.id} type="DEAL">
+      <Droppable droppableId={stage.id}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -40,7 +40,11 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
           >
             <div className="space-y-2">
               {stage.deals.map((deal, index) => (
-                <DealCard key={deal.id} deal={deal} index={index} />
+                <DealCard 
+                  key={deal.id} 
+                  deal={deal} 
+                  index={index}
+                />
               ))}
             </div>
             {provided.placeholder}
@@ -49,4 +53,6 @@ export const StageColumn: React.FC<StageColumnProps> = ({ stage }) => {
       </Droppable>
     </div>
   )
-}
+})
+
+StageColumn.displayName = 'StageColumn'

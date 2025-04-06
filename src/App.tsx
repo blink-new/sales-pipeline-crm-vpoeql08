@@ -38,15 +38,13 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <DashboardLayout />
+              <ErrorBoundary>
+                <DashboardLayout />
+              </ErrorBoundary>
             </ProtectedRoute>
           }
         >
-          <Route path="pipeline" element={
-            <ErrorBoundary>
-              <Pipeline />
-            </ErrorBoundary>
-          } />
+          <Route path="pipeline" element={<Pipeline />} />
           <Route path="contacts" element={<div>Contacts (Coming Soon)</div>} />
           <Route path="companies" element={<div>Companies (Coming Soon)</div>} />
           <Route path="analytics" element={<div>Analytics (Coming Soon)</div>} />

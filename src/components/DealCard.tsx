@@ -10,6 +10,8 @@ interface DealCardProps {
 }
 
 export const DealCard: React.FC<DealCardProps> = memo(({ deal, index }) => {
+  if (!deal?.id) return null // Safety check
+
   return (
     <Draggable draggableId={deal.id} index={index}>
       {(provided, snapshot) => {

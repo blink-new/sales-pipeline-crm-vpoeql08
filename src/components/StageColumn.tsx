@@ -10,7 +10,9 @@ interface StageColumnProps {
 }
 
 export const StageColumn: React.FC<StageColumnProps> = memo(({ stage }) => {
-  const totalValue = stage.deals.reduce((sum, deal) => sum + deal.value, 0)
+  if (!stage?.deals) return null // Safety check
+
+  const totalValue = stage.deals.reduce((sum, deal) => sum + (deal?.value || 0), 0)
   
   return (
     <div className="flex flex-col h-full w-80 bg-gray-50 rounded-lg p-4">
@@ -40,7 +42,7 @@ export const StageColumn: React.FC<StageColumnProps> = memo(({ stage }) => {
           >
             <div className="space-y-2">
               {stage.deals.map((deal, index) => (
-                <DealCard 
+                deal && <DealCard 
                   key={deal.id} 
                   deal={deal} 
                   index={index}

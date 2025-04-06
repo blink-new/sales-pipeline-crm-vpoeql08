@@ -10,7 +10,7 @@ export function Pipeline() {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = useCallback((initial: DragStart) => {
-    if (!initial.source) return
+    if (!initial?.source) return
     setIsDragging(true)
   }, [])
 
@@ -18,7 +18,7 @@ export function Pipeline() {
     setIsDragging(false)
     
     // Ensure we have valid source and destination
-    if (!result.destination || !result.source || !result.draggableId) {
+    if (!result?.destination || !result?.source || !result?.draggableId) {
       return
     }
 
@@ -45,7 +45,7 @@ export function Pipeline() {
   }, [moveDeal, stages])
 
   // If stages are not loaded yet, show loading state
-  if (!stages || stages.length === 0) {
+  if (!stages?.length) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>

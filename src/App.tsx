@@ -1,6 +1,6 @@
 
 import { useAuth, RedirectToSignIn } from '@clerk/clerk-react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import { LandingPage } from './pages/LandingPage'
 import { PricingPage } from './pages/PricingPage'
@@ -8,6 +8,7 @@ import { Pipeline } from './components/Pipeline'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isSignedIn, isLoaded } = useAuth()
+  const location = useLocation()
 
   if (!isLoaded) {
     return (
@@ -18,7 +19,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!isSignedIn) {
-    return <RedirectToSignIn />
+    // Save the attempted url
+    return <RedirectToSignIn redirectUrl={location.pathname} />
   }
 
   return <>{children}</>
